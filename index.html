@@ -1,16 +1,62 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fama's Shitty Proxy</title>
+<link rel="stylesheet" href="style.css" />
 </head>
+<body class="dark">
+  <div id="homeScreen" class="screen flex-center">
+    <h1>Fama's Shitty Proxy</h1>
+    <input
+      id="urlInput"
+      type="text"
+      placeholder="Enter URL or search"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <button id="goButton">Go</button>
+    <label class="dark-toggle">
+      <input type="checkbox" id="darkModeToggle" checked />
+      Dark Mode
+    </label>
+  </div>
 
-<body>
-  Hello world
-  <script src="script.js"></script>
+  <div id="proxyScreen" class="screen" style="display:none;">
+    <iframe
+      id="proxyFrame"
+      src=""
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <div id="browserBar">
+    <button
+      id="homeBtn"
+      title="Home"
+      aria-label="Home"
+      style="background:none; border:none; cursor:pointer; padding:0;"
+    >
+      <img
+        src="https://i.postimg.cc/3Npnp9WM/image-1.png"
+        alt="Home"
+        style="width:20px; height:20px; vertical-align:middle;"
+      />
+    </button>
+    <button id="backBtn" title="Back" aria-label="Back">&lt;</button>
+    <button id="forwardBtn" title="Forward" aria-label="Forward">&gt;</button>
+    <input
+      type="text"
+      id="taskbar"
+      placeholder="Enter URL or search"
+      autocomplete="off"
+      spellcheck="false"
+    />
+  </div>
+
+<script src="script.js"></script>
 </body>
-
 </html>
