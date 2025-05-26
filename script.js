@@ -1,96 +1,90 @@
-// DOM elements
-const input = document.getElementById("urlInput");
-const goBtn = document.getElementById("goButton");
-const frame = document.getElementById("proxyFrame");
-const home = document.getElementById("homeScreen");
-const proxy = document.getElementById("proxyScreen");
-const toggle = document.getElementById("darkModeToggle");
+const homeScreen = document.getElementById("homeScreen");
+const proxyScreen = document.getElementById("proxyScreen");
+const urlInput = document.getElementById("urlInput");
+const goButton = document.getElementById("goButton");
+const darkModeToggle = document.getElementById("darkModeToggle");
 
-const backBtn = document.getElementById("backBtn");
-const forwardBtn = document.getElementById("forwardBtn");
-const taskbar = document.getElementById("taskbar");
+const browserBar = document.getElementById("browserBar");
+const proxyUrlInput = document.getElementById("proxyUrl");
+const goBtn = document.getElementById("goBtn");
+const proxyIframe = document.getElementById("proxyIframe");
 const homeBtn = document.getElementById("homeBtn");
 
-// History state
-let historyStack = [];
-let currentIndex = -1;
+// Restore your working search logic:
+function formatUrl(input) {
+  input = input.trim();
 
-// Helper to detect if input looks like a URL (has dot + TLD-like suffix)
-function isLikelyURL(str) {
-  return /\.[a-z]{2,6}($|\/)/i.test(str);
-}
-
-// Navigate to URL or search query
-function navigateTo(rawInput) {
-  if (!rawInput) return;
-
-  let url;
-
-  if (isLikelyURL(rawInput)) {
-    url = rawInput.match(/^https?:\/\//i) ? rawInput : "https://" + rawInput;
-  } else {
-    url = `https://duckduckgo.com/?q=${encodeURIComponent(rawInput)}`;
+  // If input doesn't start with http/https, add https://
+  if (!input.match(/^https?:\/\//i)) {
+    input = "https://" + input;
   }
 
-  currentIndex++;
-  historyStack = historyStack.slice(0, currentIndex);
-  historyStack.push(url);
+  // Check if input looks like a full URL with domain extension
+  // We'll check common TLDs for simplicity (.com, .org, .net, .io, etc.)
+  const tldRegex = /\.[a-z]{2,}$/i;
+  if (!tldRegex.test(input)) {
+    // Not a URL, treat as search query
+    input = `https://duckduckgo.com/?q=${encodeURIComponent(input.replace(/^https?:\/\//i, ''))}`;
+  }
 
-  loadURL(url);
+  return input;
 }
 
-// Load URL into iframe and update UI
-function loadURL(url) {
-  frame.src = url;
-  taskbar.value = url;
-  home.style.display = "none";
-  proxy.style.display = "flex";
-  taskbar.focus();
+function openProxy(url) {
+  url = formatUrl(url);
+  proxyIframe.src = url;
+  proxyUrlInput.value = url;
+  homeScreen.style.display = "none";
+  proxyScreen.style.display = "block";
 }
 
-// Open proxy from home input
-function openProxy() {
-  navigateTo(input.value.trim());
-}
-
-// Event listeners
-goBtn.onclick = openProxy;
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") openProxy();
+goButton.addEventListener("click", () => {
+  if (urlInput.value.trim() === "") return;
+  openProxy(urlInput.value);
 });
 
-toggle.addEventListener("change", () => {
-  document.body.classList.toggle("dark", toggle.checked);
-});
-
-taskbar.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") navigateTo(taskbar.value.trim());
-});
-
-backBtn.addEventListener("click", () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    loadURL(historyStack[currentIndex]);
+urlInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && urlInput.value.trim() !== "") {
+    openProxy(urlInput.value);
   }
 });
 
-forwardBtn.addEventListener("click", () => {
-  if (currentIndex < historyStack.length - 1) {
-    currentIndex++;
-    loadURL(historyStack[currentIndex]);
+goBtn.addEventListener("click", () => {
+  if (proxyUrlInput.value.trim() === "") return;
+  openProxy(proxyUrlInput.value);
+});
+
+proxyUrlInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && proxyUrlInput.value.trim() !== "") {
+    openProxy(proxyUrlInput.value);
   }
 });
 
 homeBtn.addEventListener("click", () => {
-  proxy.style.display = "none";
-  home.style.display = "flex";
-  frame.src = "about:blank"; // clear iframe content
-  input.focus();
+  proxyIframe.src = "";
+  proxyScreen.style.display = "none";
+  homeScreen.style.display = "flex";
+  urlInput.value = "";
 });
 
-// Initialize dark mode from toggle state on page load
-if (toggle.checked) {
-  document.body.classList.add("dark");
-} else {
+// Dark mode toggle handling with localStorage
+if (localStorage.getItem("darkMode") === "false") {
   document.body.classList.remove("dark");
+  document.body.classList.add("light");
+  darkModeToggle.checked = false;
+} else {
+  document.body.classList.add("dark");
+  darkModeToggle.checked = true;
 }
+
+darkModeToggle.addEventListener("change", () => {
+  if (darkModeToggle.checked) {
+    document.body.classList.add("dark");
+    document.body.classList.remove("light");
+    localStorage.setItem("darkMode", "true");
+  } else {
+    document.body.classList.remove("dark");
+    document.body.classList.add("light");
+    localStorage.setItem("darkMode", "false");
+  }
+});

@@ -7,55 +7,37 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark">
-  <div id="homeScreen" class="screen flex-center">
-    <h1>Fama's Shitty Proxy</h1>
-    <input
-      id="urlInput"
-      type="text"
-      placeholder="Enter URL or search"
-      autocomplete="off"
-      spellcheck="false"
-    />
-    <button id="goButton">Go</button>
-    <label class="dark-toggle">
-      <input type="checkbox" id="darkModeToggle" checked />
-      Dark Mode
-    </label>
-  </div>
 
-  <div id="proxyScreen" class="screen" style="display:none;">
-    <iframe
-      id="proxyFrame"
-      src=""
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-      frameborder="0"
-      allowfullscreen
-    ></iframe>
-  </div>
+<div id="homeScreen" class="screen flex-center">
+  <h1>Fama's Shitty Proxy</h1>
+  <input id="urlInput" type="text" placeholder="Enter URL or search term" />
+  <button id="goButton">Go</button>
 
+  <label class="dark-toggle">
+    <input type="checkbox" id="darkModeToggle" checked />
+    Dark Mode
+  </label>
+
+  <div class="footer-links">
+    <a id="githubLink" href="https://github.com/bluecroc70/Famas-Proxy" target="_blank" rel="noopener noreferrer">
+      <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" />
+    </a>
+    <a id="panicLink" href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer">
+      <img src="https://northeastsecuritysolutions.com/wp-content/uploads/2024/12/panic-button-1375952_640-1.png" alt="Panic Button" />
+    </a>
+  </div>
+</div>
+
+<div id="proxyScreen" class="screen" style="display:none;">
   <div id="browserBar">
-    <button
-      id="homeBtn"
-      title="Home"
-      aria-label="Home"
-      style="background:none; border:none; cursor:pointer; padding:0;"
-    >
-      <img
-        src="https://i.postimg.cc/3Npnp9WM/image-1.png"
-        alt="Home"
-        style="width:20px; height:20px; vertical-align:middle;"
-      />
+    <button id="homeBtn" title="Home">
+      <img src="https://i.postimg.cc/3Npnp9WM/image-1.png" alt="Home" style="width:20px; height:20px;" />
     </button>
-    <button id="backBtn" title="Back" aria-label="Back">&lt;</button>
-    <button id="forwardBtn" title="Forward" aria-label="Forward">&gt;</button>
-    <input
-      type="text"
-      id="taskbar"
-      placeholder="Enter URL or search"
-      autocomplete="off"
-      spellcheck="false"
-    />
+    <input id="proxyUrl" type="text" />
+    <button id="goBtn">Go</button>
   </div>
+  <iframe id="proxyIframe" src=""></iframe>
+</div>
 
 <script src="script.js"></script>
 </body>
